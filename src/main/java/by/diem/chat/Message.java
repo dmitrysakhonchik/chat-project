@@ -8,7 +8,6 @@ public class Message implements Serializable {
     private final String data;
 
 
-    //Constructors
     public Message(MessageType type, String data) {
         this.type = type;
         this.data = data;
@@ -19,8 +18,6 @@ public class Message implements Serializable {
         this.data = null;
     }
 
-
-    //getters
 
     public MessageType getType() {
         return type;

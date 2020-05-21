@@ -69,13 +69,13 @@ public class Server {
             try (Connection connection = new Connection(socket)) {
                 //Выводить сообщение, что установлено новое соединение с удаленным адресом
                 ConsoleHelper.writeMessage("Подключение к порту: " + connection.getRemoteSocketAddress());
-                //Вызывать метод, реализующий рукопожатие с клиентом, сохраняя имя нового клиента
+                //Вызываем метод, реализующий рукопожатие с клиентом, сохраняя имя нового клиента
                 clientName = serverHandshake(connection);
-                //Рассылать всем участникам чата информацию об имени присоединившегося участника (сообщение с типом USER_ADDED)
+                //Рассылаем всем участникам чата информацию об имени присоединившегося участника
                 sendBroadcastMessage(new Message(MessageType.USER_ADDED, clientName));
-                //Сообщать новому участнику о существующих участниках
+                //Сообщаем новому участнику о существующих участниках
                 sendListOfUsers(connection, clientName);
-                //Запускать главный цикл обработки сообщений сервером
+                //Запускаем главный цикл обработки сообщений сервером
                 serverMainLoop(connection, clientName);
 
 
@@ -85,7 +85,7 @@ public class Server {
 
             //После того как все исключения обработаны, удаляем запись из connectionMap
             connectionMap.remove(clientName);
-            //и отправлялем сообщение остальным пользователям
+            //и отправляем сообщение остальным пользователям
             sendBroadcastMessage(new Message(MessageType.USER_REMOVED, clientName));
 
             ConsoleHelper.writeMessage("Соединение с удаленным адресом закрыто");
@@ -96,26 +96,26 @@ public class Server {
         private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
 
             while (true) {
-                // Сформировать и отправить команду запроса имени пользователя
+                // Сформировали и отправили команду запроса имени пользователя
                 connection.send(new Message(MessageType.NAME_REQUEST));
-                // Получить ответ клиента
+                // Получили ответ клиента
                 Message message = connection.receive();
 
-                // Проверить, что получена команда с именем пользователя
+                // Проверили, что получена команда с именем пользователя
                 if (message.getType() == MessageType.USER_NAME) {
 
-                    //Достать из ответа имя, проверить, что оно не пустое
+                    //Достали из ответа имя, проверили, что оно не пустое
                     if (message.getData() != null && !message.getData().isEmpty()) {
 
-                        // и пользователь с таким именем еще не подключен (используй connectionMap)
+                        // и пользователь с таким именем еще не подключен (connectionMap)
                         if (connectionMap.get(message.getData()) == null) {
 
-                            // Добавить нового пользователя и соединение с ним в connectionMap
+                            // Добавили нового пользователя и соединение с ним в connectionMap
                             connectionMap.put(message.getData(), connection);
-                            // Отправить клиенту команду информирующую, что его имя принято
+                            // Отправили клиенту команду информирующую, что его имя принято
                             connection.send(new Message(MessageType.NAME_ACCEPTED));
 
-                            // Вернуть принятое имя в качестве возвращаемого значения
+                            // Вернули принятое имя в качестве возвращаемого значения
                             return message.getData();
                         }
                     }
@@ -143,7 +143,7 @@ public class Server {
             while (true) {
 
                 Message message = connection.receive();
-                // Если принятое сообщение – это текст (тип TEXT)
+
                 if (message.getType() == MessageType.TEXT) {
 
                     String s = userName + ": " + message.getData();

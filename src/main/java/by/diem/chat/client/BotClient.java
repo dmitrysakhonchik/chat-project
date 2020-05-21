@@ -9,17 +9,13 @@ import java.util.Calendar;
 
 public class BotClient extends Client {
 
-
     private static int botsCounter = 0;
-
-
 
     public static void main(String[] args) {
         new BotClient().run();
     }
 
 
-    /** inner class */
     public class BotSocketThread extends SocketThread {
 
 
@@ -38,18 +34,17 @@ public class BotClient extends Client {
         @Override
         protected void processIncomingMessage(String message) {
 
-            // Вывести в консоль текст полученного сообщения message
+            // Выводит в консоль текст полученного сообщения message
             ConsoleHelper.writeMessage(message);
 
-            // Получить из message имя отправителя и текст сообщения. Они разделены ": "
+            // Получает из message имя отправителя и текст сообщения. Они разделены ": "
             String senderName = "";
             String senderMessageText;
 
             if (message.contains(": ")) {
                 senderName = message.substring(0, message.indexOf(": "));
                 senderMessageText = message.substring(message.indexOf(": ") + 2);
-            }
-            else {
+            } else {
                 senderMessageText = message;
             }
 
@@ -58,31 +53,23 @@ public class BotClient extends Client {
 
             if ("дата".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("d.MM.yyyy");
-            }
-            else if ("день".equalsIgnoreCase(senderMessageText)) {
+            } else if ("день".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("d");
-            }
-            else if ("месяц".equalsIgnoreCase(senderMessageText)) {
+            } else if ("месяц".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("MMMM");
-            }
-            else if ("год".equalsIgnoreCase(senderMessageText)) {
+            } else if ("год".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("yyyy");
-            }
-            else if ("время".equalsIgnoreCase(senderMessageText)) {
+            } else if ("время".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("H:mm:ss");
-            }
-            else if ("час".equalsIgnoreCase(senderMessageText)) {
+            } else if ("час".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("H");
-            }
-            else if ("минуты".equalsIgnoreCase(senderMessageText)) {
+            } else if ("минуты".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("m");
-            }
-            else if ("секунды".equalsIgnoreCase(senderMessageText)) {
+            } else if ("секунды".equalsIgnoreCase(senderMessageText)) {
                 format = new SimpleDateFormat("s");
             }
 
-            if (format != null)
-            {
+            if (format != null) {
                 sendTextMessage("Информация для " + senderName + ": " + format.format(Calendar.getInstance().getTime()));
             }
 
@@ -91,10 +78,9 @@ public class BotClient extends Client {
     }
 
 
-
     @Override
     protected SocketThread getSocketThread() {
-        //Он должен создавать и возвращать объект класса BotSocketThread
+        //Создаем и возвращаем объект класса BotSocketThread
         return new BotSocketThread();
     }
 
